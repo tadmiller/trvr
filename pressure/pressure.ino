@@ -2,7 +2,7 @@
 // https://medium.com/@yifeiyin/communication-between-arduino-and-unity-9fdcccc2be3f
 //#include <SerialCommand.h>
 #include <ArduinoJson.h>
-#define DEBUG 0
+int DEBUG = 0;
 
 enum STANCES {
 	NOOP,
@@ -155,8 +155,10 @@ String getCMD(String packet)
 {
 	// De-JSONify packet
 
+	// Call validatePacket()
 	//int sum = checkSum(packet[0:packet["len"]]);
 	//if (sum != packetChecksum)
+	// if validatePacket()
 		// Request retransmission of packet
 		// return NULL;
 	//return packet["data"];
@@ -199,6 +201,9 @@ String getSensorStatus()
 	return NULL;
 }
 
+// Size in bytes below for sections
+// | Number | Length | Checksum | Data |
+// | 3      | 3      | 2        | ?    |
 int buildPacket(String data)
 {
 	char formatStr[5];
@@ -211,15 +216,36 @@ int buildPacket(String data)
 	sprintf(formatStr, "%.4d", data.length());
 	packet += formatStr;
 
-	packet += checkSum(packetNumber, data);
+	packet += calcSum(packetNumber, data);
 	packet += data;
 }
 
-int checkSum(int number, String data)
+// Validate data length
+// Validate checksum
+// Return 0 if there is an issue, 1 if none
+int validatePacket(String data, int len, int num, int checkSum)
 {
-	int sum = -number ^ data.length();
+	return len == data.length() && calcSum(num, data) == checkSum ? 1 : 0;
+}
+
+// Takes Packet Number, String
+int calcSum(int number, String data)
+{
+	
+	short sum = 0;
+	for (int i = 0; i < data.length(); i++)
+		sum += data[i];
+
+	sum = (sum ^ -number);
+	sum = (sum ^ data.length());
+	//sum = sum & (number that makes it only 2 bytes);
+
+	return sum;
+	
+	// sum = -
+	//int sum = -number ^ data.length();
 	// sum = sum ^ data;
-	return 1000;
+	//return 1000;
 }
 
 /*
