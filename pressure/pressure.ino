@@ -149,8 +149,23 @@ void calibrate()
 		stanceReadings[HEELS][0] = analogRead(i);
 }
 
-// Reads the Serial data stream and
-// processes a command accordingly
+// Takes a serial String and deconstructs the packet
+// to check for validity, then executes the command
+String getCMD(String packet)
+{
+	// De-JSONify packet
+
+	//int sum = checkSum(packet[0:packet["len"]]);
+	//if (sum != packetChecksum)
+		// Request retransmission of packet
+		// return NULL;
+	//return packet["data"];
+
+	return NULL;
+}
+
+// Reads the Serial data stream and calls getCMD()
+// Then executes the specific command returned
 void commandHandler()
 {
 	// String cmd = Serial.Readline();
