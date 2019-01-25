@@ -1,8 +1,8 @@
 // https://www.alanzucconi.com/2015/10/07/how-to-integrate-arduino-with-unity/
-// https://medium.com/@yifeiyin/communication-between-arduino-and-unity-9fdcccc2be3f
+// https://medium.com/@yifeiyin/communicationbetween-arduino-and-unity-9fdcccc2be3f
 //#include <SerialCommand.h>
 #include <ArduinoJson.h>
-int DEBUG = 0;
+int DEBUG = 1;
 
 enum STANCES {
 	NOOP,
@@ -52,26 +52,26 @@ void loop()
 	JsonObject& readings = jsonBuffer.createObject();
 
 	// Left - Front Left Sensor
-	readings["l-fl"] = analogRead(leftSensors[0]);
+	readings["lfl"] = analogRead(leftSensors[0]);
 
 	// Left - Front Right Sensor
-	readings["l-fr"] = analogRead(leftSensors[1]);
+	readings["lfr"] = analogRead(leftSensors[1]);
 
 	// Left - Back Sensor
-	readings["l-b"] = analogRead(leftSensors[2]);
+	readings["lb"] = analogRead(leftSensors[2]);
 
 	// Right - Front Left Sensor
-	readings["r-fl"] = analogRead(rightSensors[0]);
+	readings["rfl"] = analogRead(rightSensors[0]);
 
 	// Right - Front Right Sensor
-	readings["r-fr"] = analogRead(rightSensors[1]);
+	readings["rfr"] = analogRead(rightSensors[1]);
 
 	// Right - Back Sensor
-	readings["r-b"] = analogRead(rightSensors[2]);
+	readings["rb"] = analogRead(rightSensors[2]);
 
 	if (DEBUG)
 	{
-		String packetData = "\n";
+		String packetData = "";
 		readings.printTo(packetData); //Serial, packetData
 		Serial.println(packetData);
 	}
@@ -81,21 +81,21 @@ void loop()
 	if (Serial.available() > 0)
 		sCmd.readSerial();
 */
-	if (DEBUG)
-		delay(1000);
-	else
-		delay(100);
+	// if (DEBUG)
+	// 	delay(0);
+	// else
+	// 	delay(100);
 }
 
 void detectStance(JsonObject& readings)
 {
-	if (readings["l-fl"].as<int>() < 100 && readings["l-fr"].as<int>() < 100 && readings["l-b"].as<int>() < 100)
+	if (readings["lfl"].as<int>() < 100 && readings["lfr"].as<int>() < 100 && readings["lb"].as<int>() < 100)
 		stance = NOOP;
-	else if (readings["l-fl"].as<int>() > 400 && readings["l-fr"].as<int>() > 400 && readings["l-b"].as<int>() < 100)
+	else if (readings["lfl"].as<int>() > 400 && readings["lfr"].as<int>() > 400 && readings["lb"].as<int>() < 100)
 		stance = BALLET;
-	else if (readings["l-fl"].as<int>() > 400 && readings["l-fr"].as<int>() > 400 && readings["l-b"].as<int>() > 400)
+	else if (readings["lfl"].as<int>() > 400 && readings["lfr"].as<int>() > 400 && readings["lb"].as<int>() > 400)
 		stance = FLAT;
-	else if (readings["l-fl"].as<int>() < 100 && readings["l-fr"].as<int>() < 100 && readings["l-b"].as<int>() > 400)
+	else if (readings["lfl"].as<int>() < 100 && readings["lfr"].as<int>() < 100 && readings["lb"].as<int>() > 400)
 		stance = HEELS;
 
 
