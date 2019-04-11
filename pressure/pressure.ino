@@ -14,8 +14,8 @@ enum STANCES {
 
 int stanceReadings[LEN][6];
 
-int leftSensors[3] = {A0, A1, A2};
-int rightSensors[3] = {A3, A4, A5};
+int leftSensors[3] = {A1, A2, A3};
+int rightSensors[3] = {A4, A5, A6};
 
 int pressure = A0;
 
@@ -44,10 +44,10 @@ void setup()
 
 void loop()
 {
-	buttonState = digitalRead(4);
-
+	//buttonState = digitalRead(4);
+Serial.println("dil");
 	Serial.flush();
-
+/*
 	StaticJsonBuffer<200> jsonBuffer;
 	JsonObject& readings = jsonBuffer.createObject();
 
@@ -64,10 +64,10 @@ void loop()
 	readings["rfl"] = analogRead(rightSensors[0]);
 
 	// Right - Front Right Sensor
-	readings["rfr"] = analogRead(rightSensors[1]);
+	//readings["rfr"] = analogRead(rightSensors[1]);
 
 	// Right - Back Sensor
-	readings["rb"] = analogRead(rightSensors[2]);
+	//readings["rb"] = analogRead(rightSensors[2]);
 
 	if (DEBUG)
 	{
@@ -77,6 +77,8 @@ void loop()
 	}
 	else
 		detectStance(readings);
+*/
+	delay(200);
 /**
 	if (Serial.available() > 0)
 		sCmd.readSerial();
@@ -163,7 +165,7 @@ String getCMD(String packet)
 		// return NULL;
 	//return packet["data"];
 
-	return NULL;
+	return "";
 }
 
 // Reads the Serial data stream and calls getCMD()
@@ -177,28 +179,28 @@ void commandHandler()
 // the left foot in a JSONified object.
 String getLeftFoot()
 {
-	return NULL;
+	return "";
 }
 
 // Returns a reading from each sensor on
 // the right foot in a JSONified object.
 String getRightFoot()
 {
-	return NULL;
+	return "";
 }
 
 // Returns the status of the Arduino in a JSONified
 // object. Status 1 means working, 0 means error.
 String getArduinoStatus()
 {
-	return NULL;
+	return "";
 }
 
 // Returns the status of each sensor in a JSONified
 // object. Status 1 means working, 0 means error. 
 String getSensorStatus()
 {
-	return NULL;
+	return "";
 }
 
 // Size in bytes below for sections
