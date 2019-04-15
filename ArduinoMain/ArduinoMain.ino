@@ -55,7 +55,7 @@ void setup()
 	for (int status = WL_IDLE_STATUS; status != WL_CONNECTED; )
 		status = WiFi.begin(SSID, SSID_PW);
 
-	WiFi.hostname("right.trvr");
+	WiFi.hostname("trvr-right");
 	delay(100);
 	server.begin();                           // start the web server on port 80
 	printWifiStatus();                        // you're connected now, so print out the status
@@ -96,10 +96,10 @@ void jsonPrint(WiFiClient * client, String key, int val, int next)
 void printSensorData(WiFiClient * client)
 {
 	(* client).println("{");
-	jsonPrint(client, "s1", readings[0], 1);
-	jsonPrint(client, "s2", readings[1], 1);
-	jsonPrint(client, "s3", readings[2], 1);
-	jsonPrint(client, "s4", readings[3], 0);
+	jsonPrint(client, "front", readings[0], 1);
+	jsonPrint(client, "back", readings[1], 1);
+	jsonPrint(client, "midl", readings[2], 1);
+	jsonPrint(client, "midr", readings[3], 0);
 	(* client).println("}");
 }
 
