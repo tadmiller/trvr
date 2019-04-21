@@ -24,7 +24,6 @@ int DEBUG = 0;
 
 const char SSID[] = "DIL";
 const char SSID_PW[] = "TheHumanC3nt1p3d3";
-const int sensors[4] = {A1, A2, A3, A4};
 int readings[4] = {0, 0, 0, 0};
 
 WiFiServer server(DEFAULT_PORT);
@@ -55,7 +54,7 @@ void setup()
 	for (int status = WL_IDLE_STATUS; status != WL_CONNECTED; )
 		status = WiFi.begin(SSID, SSID_PW);
 
-	WiFi.hostname("trvr-right");
+	WiFi.hostname("trvr-left");
 	delay(100);
 	server.begin();                           // start the web server on port 80
 	printWifiStatus();                        // you're connected now, so print out the status
@@ -96,19 +95,19 @@ void jsonPrint(WiFiClient * client, String key, int val, int next)
 void printSensorData(WiFiClient * client)
 {
 	(* client).println("{");
-	jsonPrint(client, "front", readings[0], 1);
-	jsonPrint(client, "back", readings[1], 1);
-	jsonPrint(client, "midl", readings[2], 1);
-	jsonPrint(client, "midr", readings[3], 0);
+	jsonPrint(client, "front", readings[2], 1);
+	jsonPrint(client, "back", readings[0], 1);
+	jsonPrint(client, "midl", readings[3], 1);
+	jsonPrint(client, "midr", readings[1], 0);
 	(* client).println("}");
 }
 
 int getSensorData()
 {
-	readings[0] = analogRead(sensors[0]);
-	readings[1] = analogRead(sensors[1]);
-	readings[2] = analogRead(sensors[2]);
-	readings[3] = analogRead(sensors[3]);
+	readings[0] = analogRead(A1);
+	readings[1] = analogRead(A2);
+	readings[2] = analogRead(A3);
+	readings[3] = analogRead(A4);
 
 	return READ_SUCCESS;
 }
@@ -128,43 +127,15 @@ void loop()
 		{
 			if (client.available())
 			{
-				// If there's bytes to read from the client then read a byte
-				char c = client.read();
+				debugPrintln("Printing JSON data");
 
-				if (DEBUG)
-					Serial.write(c);
-				if (c == '\n')
-				{	// If the current line is blank, there are two \n, which is the end of the client HTTP request, so send a response
-					if (lineFeed.length() == 0)
-					{
-						httpOK(&client);
-						// The content of the HTTP response follows the header
-	
-						// Some content would be here if we made a web page
- 
-						// The HTTP response ends with another blank line
-						client.println();
-						break;
-					}
-					else // If there is a \n, then clear our string
-						lineFeed = "";
-				}
-				// If there is anything in the stream add it to the end of the lineFeed
-				else if (c != '\r')
-					lineFeed += c;
+				jsonOK(&client);
+				getSensorData();
+				printSensorData(&client);
 
-				if (lineFeed.endsWith("GET /data"))
-				{
-					debugPrintln("DATA requested");
-
-					jsonOK(&client);
-					getSensorData();
-					printSensorData(&client);
-
-					client.println();
-					digitalWrite(DEBUG_LED, LOW);
-					client.stop();
-				}
+				client.println();
+				digitalWrite(DEBUG_LED, LOW);
+				client.stop();
 			}
 		}
 
