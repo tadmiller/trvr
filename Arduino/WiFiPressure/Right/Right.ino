@@ -20,7 +20,7 @@
 #define READ_SUCCESS 0
 #define DEFAULT_PORT 80
 #define DEBUG_LED LED_BUILTIN
-int DEBUG = 0;
+int DEBUG = 1;
 
 const char SSID[] = "DIL";
 const char SSID_PW[] = "TheHumanC3nt1p3d3";
@@ -31,12 +31,9 @@ WiFiServer server(DEFAULT_PORT);
 void setup()
 {
 	delay(1000);
-	if (Serial)
-	{
-		Serial.begin(9600);
-		Serial.flush();
-		DEBUG = 1;
-	}
+
+	Serial.begin(9600);
+	Serial.flush();
 
 	pinMode(DEBUG_LED, OUTPUT);
 	debugPrintln("Starting routine...");
@@ -54,7 +51,7 @@ void setup()
 	for (int status = WL_IDLE_STATUS; status != WL_CONNECTED; )
 		status = WiFi.begin(SSID, SSID_PW);
 
-	WiFi.hostname("trvr-left");
+	WiFi.hostname("trvr-right");
 	delay(100);
 	server.begin();                           // start the web server on port 80
 	printWifiStatus();                        // you're connected now, so print out the status
@@ -105,9 +102,9 @@ void printSensorData(WiFiClient * client)
 int getSensorData()
 {
 	readings[0] = analogRead(A1);
-	readings[1] = analogRead(A4);
+	readings[1] = analogRead(A2);
 	readings[2] = analogRead(A3);
-	readings[3] = analogRead(A2);
+	readings[3] = analogRead(A4);
 
 	return READ_SUCCESS;
 }
