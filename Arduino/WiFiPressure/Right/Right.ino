@@ -30,6 +30,7 @@ WiFiServer server(DEFAULT_PORT);
  
 void setup()
 {
+	digitalWrite(DEBUG_LED, HIGH);
 	delay(1000);
 
 	Serial.begin(9600);
@@ -42,6 +43,16 @@ void setup()
 	if (WiFi.status() == WL_NO_SHIELD)
 	{
 		Serial.println("NOT PRESENT");
+
+		// Status indication that the Arduino is failing
+		bool debug = false;
+		for (int i = 0; i < 99; i++)
+		{
+			digitalWrite(DEBUG_LED, debug ? HIGH : LOW);
+			debug = !debug;
+			delay(1000);
+		}
+
 		exit(0);
 	}
 
@@ -52,10 +63,11 @@ void setup()
 		status = WiFi.begin(SSID, SSID_PW);
 
 	WiFi.hostname("trvr-right");
-	delay(100);
-	server.begin();                           // start the web server on port 80
-	printWifiStatus();                        // you're connected now, so print out the status
-	digitalWrite(DEBUG_LED, HIGH);
+
+	// Start the web server on port 80
+	server.begin();
+	printWifiStatus();
+	digitalWrite(DEBUG_LED, LOW);
 }
 
 void debugPrintln(String msg)
@@ -73,6 +85,7 @@ void httpOK(WiFiClient * client)
 	(* client).println();
 }
 
+// Perform HTTP 200 OK and indicate a JSON packet is being sent
 void jsonOK(WiFiClient * client)
 {
 	(* client).println("HTTP/1.1 200 OK");
@@ -80,6 +93,7 @@ void jsonOK(WiFiClient * client)
 	(* client).println();
 }
 
+// Print the key/value in a JSON format
 void jsonPrint(WiFiClient * client, String key, int val, int next)
 {
 	(* client).print("\t\"");
@@ -89,6 +103,7 @@ void jsonPrint(WiFiClient * client, String key, int val, int next)
 	(* client).print(next ? "\",\n" : "\"\n");
 }
 
+// Print out the sensor readings using JSON
 void printSensorData(WiFiClient * client)
 {
 	(* client).println("{");
@@ -99,6 +114,7 @@ void printSensorData(WiFiClient * client)
 	(* client).println("}");
 }
 
+// Store the sensor readings in an array
 int getSensorData()
 {
 	readings[0] = analogRead(A1);
@@ -117,11 +133,12 @@ void loop()
 	{
 		digitalWrite(DEBUG_LED, HIGH);
 
+		// Accept client
 		debugPrintln("New client available");
 		String lineFeed = "";
 
 		while (client.connected())
-		{
+		{	// Print JSON data over web to client
 			if (client.available())
 			{
 				debugPrintln("Printing JSON data");
