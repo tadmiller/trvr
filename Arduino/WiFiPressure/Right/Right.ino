@@ -1,4 +1,7 @@
 /*
+ * # Author(s)
+ * Tad Miller & Danny Nsouli
+ *
  * # Description
  * This script can be downloaded to an Arduino MKR1000
  * It hosts an HTTP server that allows a certain type of request
@@ -9,7 +12,6 @@
  * # Sources
  * 		* WiFi Module: https://github.com/arduino-libraries/WiFi101/blob/master/examples/SimpleWebServerWiFi/SimpleWebServerWiFi.ino
  */
-
 #include <SPI.h>
 #include <WiFi101.h>
 #include <WiFiClient.h>

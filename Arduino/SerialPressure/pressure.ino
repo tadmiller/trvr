@@ -1,6 +1,14 @@
+/*
+ * # Author(s)
+ * Tad Miller & Danny Nsouli
+ *
+ * # Description
+ * Allows pressure readings to be transferred over USB serial
+ */
+
 // https://www.alanzucconi.com/2015/10/07/how-to-integrate-arduino-with-unity/
 // https://medium.com/@yifeiyin/communicationbetween-arduino-and-unity-9fdcccc2be3f
-//#include <SerialCommand.h>
+
 #include <ArduinoJson.h>
 int DEBUG = 1;
 

@@ -1,4 +1,7 @@
 /*
+ * # Author(s)
+ * Tad Miller & Danny Nsouli
+ *
  * # Description
  * This script can be downloaded to an Arduino MKR1000
  * It hosts an HTTP server that allows a certain type of request
