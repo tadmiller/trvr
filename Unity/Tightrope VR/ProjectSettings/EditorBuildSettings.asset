@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: 26d6554392d277f478ded1aa93718aec
+  - enabled: 1
+    path: Assets/Scenes/Nature Scene.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Mountain Scene.unity
+    guid: 4f6669c7e09521f4194a9b07afaf6a26
+  - enabled: 1
+    path: Assets/Scenes/City Scene.unity
+    guid: 7476aa1f837acb94d8a31423ff20eb92
+  m_configObjects: {}
